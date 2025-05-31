@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartRail - Indian Railway Portal</title>
+    <style>
+        .carousel-container {
+            max-width: 600px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-slide {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-image {
+            min-width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .carousel-buttons {
+            position: absolute;
+            width: 100%;
+            top: 45%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .carousel-button {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+
+        .carousel-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background: #bf1e2e;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-container img {
+            height: 60px;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav {
+            margin-top: 0.5rem;
+        }
+
+        section {
+            padding: 2rem;
+            margin: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #bf1e2e;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            gap: 8px;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: white;
+        }
+
+
+        .search-box input,
+        .search-box button,
+        form input,
+        form select,
+        form button,
+        #status input,
+        #status button {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-box button,
+        form button,
+        #status button {
+            background-color: #bf1e2e;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .search-box button:hover,
+        form button:hover,
+        #status button:hover {
+            background-color: #a81725;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #eee;
+            margin: 0.5rem 0;
+            padding: 0.75rem;
+            border-left: 5px solid #bf1e2e;
+        }
+
+        footer {
+            text-align: center;
+            background: #333;
+            color: white;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        #offers {
+            background: #f0f8ff;
+        }
+
+        #offers ul li {
+            border-left-color: #1e90ff;
+        }
+
+        /* Offers Section styles */
+        #offers {
+            padding: 2rem 1rem;
+        }
+
+        #offers h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        #offers .offer-card {
+            cursor: pointer;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            color: #333;
+            user-select: none;
+        }
+
+        #offers .offer-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #offers .badge {
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .limited-time {
+            background: #ff4d4d;
+        }
+
+        .best-value {
+            background: #007bff;
+        }
+
+        .verified-id {
+            background: #28a745;
+        }
+
+        .exclusive {
+            background: #6f42c1;
+        }
+
+        /* Contact Form */
+        #contact form {
+            max-width: 450px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #contact form input,
+        #contact form textarea {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        #contact form button {
+            background-color: #bf1e2e;
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #contact form button:hover {
+            background-color: #a81725;
+        }
+
+        #contact .confirmation-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://i.ytimg.com/vi/eHue9ug3Cy0/maxresdefault.jpg" alt="Indian Railways Logo" />
+            <h1>SmartRail - Indian Railway Portal</h1>
+        </div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#search">Search Trains</a>
+            <a href="#book">Book Tickets</a>
+            <a href="#status">PNR Status</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section id="home">
+        <div class="carousel-container">
+            <div class="carousel-slide" id="carousel-slide">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSiVEDcazLk3M-VUbpogJ-rUiK1UPYlLf-kg&s" class="carousel-image" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7-qo6Shkdt2RdxPZ7evRtIa218W6x3CE0rg&s" class="carousel-image" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMHJl4EK-OVt0OgTp5zQKWT9jNsmVDwvXiOQ&s" class="carousel-image" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkdgTPUwANSgmyOmNp6HfIkz0tmyffPl6Mog&s" class="carousel-image" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXx8Jr69XeFrwpQyAsFNfP1yZfSAxx-rUEow&s" class="carousel-image" />
+            </div>
+            <div class="carousel-buttons">
+                <button class="carousel-button" onclick="prevSlide()">‹</button>
+                <button class="carousel-button" onclick="nextSlide()">›</button>
+                <div class="carousel-indicators" id="carousel-indicators"></div>
+
+            </div>
+        </div>
+        <div id="live-time" style="text-align:center; font-size:2.4rem; margin-top:10px; color:#555;">
+            Time: <span id="clock">--:--:--</span>
+        </div>
+
+
+        <h2>Welcome to SmartRail</h2>
+        <p>Search and book Indian Railways tickets easily.</p>
+        <div style="margin-top: 15px; font-style: italic; color: #555;">
+            <p><strong>Safe Journey Quotes:</strong></p>
+            <ul>
+                <li>"May your journey be safe and your memories unforgettable."</li>
+                <li>"Travel safe, travel smart, and return with a heart full of stories."</li>
+                <li>"Wishing you a smooth journey and happy destinations."</li>
+                <li>"Safe travels and joyous adventures await you."</li>
+                <li>"Every journey brings new opportunities; travel with care."</li>
+                <li>"May the rails guide you safely to your dreams."</li>
+                <li>“From chai at every halt to the echoing train horns — may your journey through India’s soul be safe and unforgettable.”</li>
+                <li>“As you travel across the heart of India by rail, may you carry peace, return with joy, and leave behind only good vibes.”</li>
+                <li>“Let the Indian Railways show you the colors of the nation — may your journey be safe, soulful, and scenic.”</li>
+
+
+
+
+            </ul>
+        </div>
+    </section>
+
+    <section id="search" style="background: #fdf6f0;">
+        <h2 style="color: #d62828;">Search Trains</h2>
+        <div class="search-box">
+            <input type="text" id="from-search" placeholder="From Station">
+            <input type="text" id="to-search" placeholder="To Station">
+            <input type="date" id="date-search">
+            <button onclick="searchTrains()">Search Trains</button>
+        </div>
+        <div id="train-list" class="train-cards"></div>
+    </section>
+
+    <section id="book">
+        <h2>Book Your Ticket</h2>
+        <form onsubmit="return bookTicket(event)">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="number" id="age" placeholder="Age" required>
+            <select id="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <select id="train">
+                <option value="Rajdhani Express">Rajdhani Express</option>
+                <option value="Shatabdi Express">Shatabdi Express</option>
+                <option value="Duronto Express">Duronto Express</option>
+                <option value="Karnataka Express">Karnataka Express</option>
+                <option value="Mumbai Rajdhani">Mumbai Rajdhani</option>
+            </select>
+            <button type="submit">Confirm Booking</button>
+        </form>
+        <div id="booking-confirmation"></div>
+    </section>
+
+    <section id="status">
+        <h2>Check PNR Status</h2>
+        <input type="text" id="pnr" placeholder="Enter PNR">
+        <button onclick="checkPNR()">Check</button>
+        <div id="pnr-result"></div>
+    </section>
+    <section id="food-order" class="food-order-section">
+        <h2>🍽️ Order Your Meal Onboard</h2>
+        <div class="food-menu">
+            <div class="food-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPbQMgD79WJwULTkrE5C-MsHcUMyKozMq-Kw&s" alt="Veg Biryani">
+                <h3>Veg Biryani</h3>
+                <p>₹120</p>
+                <input type="number" min="1" value="1">
+                <button>Order Now</button>
+            </div>
+            <div class="food-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ67GVT63IzbY1CzYJBBARedLBhJTHf8x7y9g&s" alt="South Indian Thali">
+                <h3>South Indian Thali</h3>
+                <p>₹150</p>
+                <input type="number" min="1" value="1">
+                <button>Order Now</button>
+            </div>
+            <div class="food-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR55u6vU0U0zGtNH14Fei7kF2TC49GlUtUhSw&s" alt="Grilled Sandwich">
+                <h3>Grilled Sandwich</h3>
+                <p>₹80</p>
+                <input type="number" min="1" value="1">
+                <button>Order Now</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="offers">
+        <h2 style="color: #d62828;">🎉 Exciting Ticket Offers 🎉</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            <div class="offer-card summer-special" data-offer="15% off on all AC class tickets booked before June 10th. Hurry, limited time offer!">
+                <h3>🚄 Summer Special <span class="badge limited-time">Limited Time</span></h3>
+                <p><strong>15% off</strong> on all AC class tickets booked before <strong>June 10th</strong>.</p>
+            </div>
+
+            <div class="offer-card group-booking" data-offer="Book for 4 or more passengers and get 1 ticket free! Enjoy traveling with friends or family.">
+                <h3>👥 Group Booking <span class="badge best-value">Best Value</span></h3>
+                <p>Book for <strong>4 or more passengers</strong> and get <strong>1 ticket free</strong>!</p>
+            </div>
+
+            <div class="offer-card student-discount" data-offer="Enjoy 10% off on every booking with valid student ID. Make your travel affordable!">
+                <h3>🎓 Student Discount <span class="badge verified-id">Verified ID</span></h3>
+                <p>Enjoy <strong>10% off</strong> on every booking with valid student ID.</p>
+            </div>
+
+            <div class="offer-card weekend-deal" data-offer="Get extra cashback on tickets booked for Saturday and Sunday travel. Plan your weekend trips now!">
+                <h3>🗓 Weekend Deal <span class="badge exclusive">Exclusive</span></h3>
+                <p>Get <strong>extra cashback</strong> on tickets booked for Saturday and Sunday travel.</p>
+            </div>
+
+            <div class="offer-card senior-citizen" data-offer="Special discounted fares for all passengers aged 60 and above. Travel comfortably and save!">
+                <h3>🧓 Senior Citizen Concession</h3>
+                <p>Special discounted fares for all passengers aged <strong>60 and above</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <style>
+        #offers {
+            padding: 2rem 1rem;
+        }
+
+        #offers h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #d62828;
+        }
+
+        #offers .offer-card {
+            cursor: pointer;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            color: white;
+            user-select: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+
+        /* Individual colors for offers */
+        .offer-card.summer-special {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            /* warm orange gradient */
+        }
+
+        .offer-card.group-booking {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            /* purple to blue gradient */
+        }
+
+        .offer-card.student-discount {
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            /* teal to navy gradient */
+        }
+
+        .offer-card.weekend-deal {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            /* yellow gradient */
+            color: #333;
+        }
+
+        .offer-card.senior-citizen {
+            background: linear-gradient(135deg, #283e51, #485563);
+            /* slate blue gradient */
+        }
+
+        #offers .offer-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Badge colors remain */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .limited-time {
+            background: #ff4d4d;
+        }
+
+        .best-value {
+            background: #007bff;
+        }
+
+        .verified-id {
+            background: #28a745;
+        }
+
+        .exclusive {
+            background: #6f42c1;
+        }
+
+        /* Hover effect on offers (already included above but included here again) */
+        #offers .offer-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .food-order-section {
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .food-order-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .food-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .food-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            width: 220px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .food-item img {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .food-item h3 {
+            font-size: 20px;
+            margin: 10px 0 5px;
+        }
+
+        .food-item p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .food-item input {
+            width: 50px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .food-item button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .food-item button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: support@smartrail.in</p>
+        <p>Phone: 1800-123-4567</p>
+
+        <form id="contact-form">
+            <input type="text" id="contact-name" placeholder="Your Name" required />
+            <input type="email" id="contact-email" placeholder="Your Email" required />
+            <textarea id="contact-message" rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <div class="confirmation-message" id="contact-confirmation"></div>
+    </section>
+    <footer>
+        <p>© 2025 SmartRail. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Carousel logic
+        let currentSlide = 0;
+        const carouselSlide = document.getElementById('carousel-slide');
+        const totalSlides = carouselSlide.children.length;
+
+        function updateCarousel() {
+            carouselSlide.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        // Autoplay carousel every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Search trains stub (mock)
+        function searchTrains() {
+            const from = document.getElementById('from-search').value.trim();
+            const to = document.getElementById('to-search').value.trim();
+            const date = document.getElementById('date-search').value;
+
+            if (!from || !to || !date) {
+                alert('Please fill in From, To and Date fields to search trains.');
+                return;
+            }
+
+            const trains = [{
+                    name: 'Rajdhani Express',
+                    from: 'Delhi',
+                    to: 'Mumbai'
+                },
+                {
+                    name: 'Shatabdi Express',
+                    from: 'Delhi',
+                    to: 'Chennai'
+                },
+                {
+                    name: 'Duronto Express',
+                    from: 'Mumbai',
+                    to: 'Kolkata'
+                },
+                {
+                    name: 'Karnataka Express',
+                    from: 'Bangalore',
+                    to: 'Delhi'
+                },
+                {
+                    name: 'Mumbai Rajdhani',
+                    from: 'Mumbai',
+                    to: 'Delhi'
+                }
+            ];
+
+            const results = trains.filter(train =>
+                train.from.toLowerCase() === from.toLowerCase() &&
+                train.to.toLowerCase() === to.toLowerCase()
+            );
+
+            const trainList = document.getElementById('train-list');
+            trainList.innerHTML = '';
+
+            if (results.length === 0) {
+                trainList.innerHTML = '<p>No trains found for this route.</p>';
+            } else {
+                results.forEach(train => {
+                    const div = document.createElement('div');
+                    div.textContent = `${train.name} from ${train.from} to ${train.to}`;
+                    div.style.padding = '10px';
+                    div.style.border = '1px solid #ccc';
+                    div.style.marginBottom = '8px';
+                    div.style.borderRadius = '5px';
+                    trainList.appendChild(div);
+                });
+            }
+        }
+
+        // Booking stub
+        function bookTicket(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const train = document.getElementById('train').value;
+
+            if (!name || !age || !gender || !train) {
+                alert('Please fill all booking fields');
+                return false;
+            }
+
+            document.getElementById('booking-confirmation').textContent =
+                `Thank you ${name}! Your ticket for ${train} has been booked successfully.`;
+
+            e.target.reset();
+            return false;
+        }
+
+        // PNR Status stub
+        function checkPNR() {
+            const pnr = document.getElementById('pnr').value.trim();
+
+            if (!pnr || pnr.length !== 10 || isNaN(pnr)) {
+                alert('Please enter a valid 10-digit PNR number.');
+                return;
+            }
+
+            // Mock response
+            const statuses = [
+                'Confirmed',
+                'Waitlisted',
+                'Cancelled',
+                'RAC'
+            ];
+
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            document.getElementById('pnr-result').textContent = `PNR Status for ${pnr}: ${randomStatus}`;
+        }
+
+        // Offers section - clickable alerts for offers
+        document.querySelectorAll('#offers .offer-card').forEach(card => {
+            card.addEventListener('click', () => {
+                alert(card.getAttribute('data-offer'));
+            });
+        });
+
+        // Contact form validation & submission
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+
+            if (!name || !email || !message) {
+                alert('Please fill all fields in the contact form.');
+                return;
+            }
+
+            // Simple email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Here you would normally send the form data to a server
+
+            this.reset();
+            const confirmation = document.getElementById('contact-confirmation');
+            confirmation.textContent = 'Thank you for contacting us! We will get back to you shortly.';
+
+            setTimeout(() => {
+                confirmation.textContent = '';
+            }, 6000);
+        });
+
+        let startX = 0;
+
+        carouselSlide.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        carouselSlide.addEventListener("touchend", (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const deltaX = endX - startX;
+
+            if (deltaX > 50) {
+                prevSlide();
+            } else if (deltaX < -50) {
+                nextSlide();
+            }
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-IN', {
+                hour12: true
+            });
+            document.getElementById("clock").textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+    </script>
+    <script>
+        document.querySelectorAll(".food-item button").forEach(button => {
+            button.addEventListener("click", () => {
+                alert("✅ Your order has been placed! Thank you for using SmartRail.");
+            });
+        });
+    </script>
+
+</body>
+
+</html>
